@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aroma & Café | Cafetería de Especialidad</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Tailwind Configuration for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // Paleta personalizada: Café Oscuro, Café Claro y Blanco
+                        darkcoffee: {
+                            DEFAULT: '#2B1704', // Café Oscuro Principal
+                            hover: '#1F1002',
+                            light: '#3D2208'
+                        },
+                        lightcoffee: {
+                            DEFAULT: '#C69C6D', // Café Claro Principal
+                            light: '#E2C7A7',
+                            border: '#D2AB7F',
+                            bg: '#F8F3ED'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        .font-serif { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F8F3ED;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C69C6D;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2B1704;
+        }
+    </style>
+</head>
+<body class="bg-white text-darkcoffee font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <header class="sticky top-0 z-40 bg-darkcoffee text-white shadow-xl transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="#inicio" onclick="showPage('inicio')" class="flex items-center space-x-3 group">
+                    <div class="p-2.5 bg-lightcoffee rounded-full text-darkcoffee group-hover:scale-105 transition">
+                        <i data-lucide="coffee" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <span class="text-2xl font-bold font-serif tracking-wide text-white block leading-tight">Aroma & Café</span>
+                        <span class="text-xs text-lightcoffee uppercase tracking-widest font-sans">Especialidad</span>
+                    </div>
+                </a>
+
+                <!-- Navegación Escritorio -->
+                <nav class="hidden md:flex space-x-10 text-base font-medium">
+                    <button onclick="showPage('inicio')" id="nav-inicio" class="nav-link text-lightcoffee border-b-2 border-lightcoffee pb-1 transition duration-200">Inicio</button>
+                    <button onclick="showPage('productos')" id="nav-productos" class="nav-link text-white hover:text-lightcoffee pb-1 transition duration-200">Productos</button>
+                    <button onclick="showPage('contacto')" id="nav-contacto" class="nav-link text-white hover:text-lightcoffee pb-1 transition duration-200">Contactar</button>
+                </nav>
+
+                <!-- Acciones (Carrito + Móvil Menu Btn) -->
+                <div class="flex items-center space-x-4">
+                    <!-- Botón Carrito -->
+                    <button id="cart-toggle-btn" onclick="toggleCart()" class="relative p-2.5 text-white hover:text-lightcoffee bg-darkcoffee-light rounded-full border border-lightcoffee/30 hover:border-lightcoffee transition">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        <span id="cart-badge" class="absolute -top-1 -right-1 bg-lightcoffee text-darkcoffee font-bold text-xs w-5 h-5 rounded-full flex items-center justify-center hidden shadow">0</span>
+                    </button>
+
+                    <!-- Botón Menú Móvil -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-white hover:text-lightcoffee focus:outline-none">
+                        <i data-lucide="menu" class="w-7 h-7" id="menu-icon-open"></i>
+                        <i data-lucide="x" class="w-7 h-7 hidden" id="menu-icon-close"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menú Desplegable Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-darkcoffee border-t border-lightcoffee/20 px-4 pt-3 pb-6 space-y-3">
+            <button onclick="showPage('inicio'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-white hover:bg-darkcoffee-light hover:text-lightcoffee">Inicio</button>
+            <button onclick="showPage('productos'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-white hover:bg-darkcoffee-light hover:text-lightcoffee">Productos</button>
+            <button onclick="showPage('contacto'); toggleMobileMenu();" class="block w-full text-left px-3 py-2 rounded-lg text-base font-medium text-white hover:bg-darkcoffee-light hover:text-lightcoffee">Contactar</button>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+
+        <!-- ==================== PÁGINA 1: INICIO ==================== -->
+        <div id="page-inicio" class="page-content">
+            <!-- HERO SECTION -->
+            <section class="relative bg-darkcoffee text-white min-h-[85vh] flex items-center justify-center overflow-hidden">
+                <div class="absolute inset-0 z-0 opacity-30">
+                    <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=1920" 
+                         alt="Cafetería Ambiente" 
+                         class="w-full h-full object-cover"
+                         onerror="this.src='https://placehold.co/1920x1080/2B1704/ffffff?text=Aroma+%26+Café'">
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-darkcoffee via-darkcoffee/60 to-transparent"></div>
+
+                <div class="relative z-10 max-w-5xl mx-auto px-4 text-center py-20">
+                    <span class="inline-block py-1.5 px-4 rounded-full bg-darkcoffee-light border border-lightcoffee text-lightcoffee text-xs font-semibold tracking-widest uppercase mb-6">
+                        Granos Seleccionados & Tueste Artesanal
+                    </span>
+                    <h1 class="text-4xl sm:text-6xl md:text-7xl font-serif font-bold text-white mb-6 leading-tight">
+                        Sabor auténtico en cada taza
+                    </h1>
+                    <p class="text-lg sm:text-xl text-lightcoffee-light max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+                        Bienvenido a Aroma & Café. Elaboramos cada bebida con dedicación, utilizando granos de origen único tostados a la perfección para brindarte momentos inolvidables.
+                    </p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="showPage('productos')" class="px-8 py-4 bg-lightcoffee hover:bg-lightcoffee-border text-darkcoffee font-bold rounded-full shadow-lg transition duration-300 flex items-center justify-center gap-2">
+                            <i data-lucide="coffee" class="w-5 h-5"></i> Ver Nuestros Productos
+                        </button>
+                        <button onclick="showPage('contacto')" class="px-8 py-4 bg-transparent hover:bg-white/10 text-white font-semibold rounded-full border-2 border-lightcoffee transition duration-300 flex items-center justify-center gap-2">
+                            <i data-lucide="map-pin" class="w-5 h-5"></i> Visítanos
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PILARES / CARACTERÍSTICAS -->
+            <section class="py-16 bg-lightcoffee-bg border-b border-lightcoffee-border/40">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="flex items-center p-6 bg-white rounded-2xl shadow-sm border border-lightcoffee-border/30 hover:border-lightcoffee transition">
+                            <div class="p-4 bg-lightcoffee-bg text-darkcoffee rounded-xl mr-5 border border-lightcoffee-border/40">
+                                <i data-lucide="bean" class="w-8 h-8"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-darkcoffee font-serif">Grano 100% Arábica</h3>
+                                <p class="text-sm text-gray-600 mt-1">Cosechado en fincas sostenibles de alta altitud.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center p-6 bg-white rounded-2xl shadow-sm border border-lightcoffee-border/30 hover:border-lightcoffee transition">
+                            <div class="p-4 bg-lightcoffee-bg text-darkcoffee rounded-xl mr-5 border border-lightcoffee-border/40">
+                                <i data-lucide="flame" class="w-8 h-8"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-darkcoffee font-serif">Tueste Local</h3>
+                                <p class="text-sm text-gray-600 mt-1">Tostado semanalmente para conservar la máxima frescura.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center p-6 bg-white rounded-2xl shadow-sm border border-lightcoffee-border/30 hover:border-lightcoffee transition">
+                            <div class="p-4 bg-lightcoffee-bg text-darkcoffee rounded-xl mr-5 border border-lightcoffee-border/40">
+                                <i data-lucide="heart" class="w-8 h-8"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-darkcoffee font-serif">Hecho con Pasión</h3>
+                                <p class="text-sm text-gray-600 mt-1">Baristas expertos cuidando cada detalle de tu bebida.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SOBRE NOSOTROS -->
+            <section class="py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                        <div class="relative">
+                            <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&q=80&w=800" 
+                                 alt="Barista extrayendo café" 
+                                 class="w-full h-[450px] object-cover rounded-2xl shadow-xl"
+                                 onerror="this.src='https://placehold.co/800x600/2B1704/ffffff?text=Barista+Aroma+%26+Café'">
+                            <div class="absolute -bottom-6 -right-6 bg-darkcoffee text-white p-6 rounded-2xl shadow-2xl hidden sm:block max-w-xs border border-lightcoffee/30">
+                                <p class="font-serif italic text-base text-lightcoffee-light">"El café une a las personas y alegra las mañanas."</p>
+                                <span class="text-xs text-lightcoffee block mt-2 uppercase font-semibold">— Aroma & Café</span>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <span class="text-darkcoffee font-bold text-sm uppercase tracking-wider bg-lightcoffee-bg px-3 py-1 rounded-md border border-lightcoffee-border/30">Nuestra Historia</span>
+                            <h2 class="text-3xl sm:text-4xl font-serif font-bold text-darkcoffee leading-tight">
+                                Pasión por el buen café y el espacio acogedor
+                            </h2>
+                            <p class="text-gray-700 leading-relaxed">
+                                En <strong>Aroma & Café</strong> nos dedicamos a ofrecer más que solo café: creamos un refugio donde puedes hacer una pausa, disfrutar de aromas intensos y deleitarte con nuestra repostería artesanal recién horneada.
+                            </p>
+                            <p class="text-gray-700 leading-relaxed">
+                                Colaboramos de forma directa con pequeños productores para asegurar prácticas éticas de comercio justo y obtener únicamente los granos más selectos del mercado.
+                            </p>
+                            <div class="pt-4 flex gap-4">
+                                <button onclick="showPage('productos')" class="px-6 py-3 bg-darkcoffee text-white hover:bg-darkcoffee-hover font-semibold rounded-xl transition">
+                                    Explorar la carta
+                                </button>
+                                <button onclick="showPage('contacto')" class="px-6 py-3 bg-lightcoffee-bg text-darkcoffee border border-lightcoffee hover:bg-lightcoffee-light font-semibold rounded-xl transition">
+                                    Contáctanos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== PÁGINA 2: PRODUCTOS ==================== -->
+        <div id="page-productos" class="page-content hidden">
+            <section class="py-12 bg-darkcoffee text-white text-center">
+                <div class="max-w-7xl mx-auto px-4">
+                    <span class="text-lightcoffee font-semibold text-xs uppercase tracking-widest block mb-2">Carta Digital</span>
+                    <h1 class="text-4xl font-serif font-bold text-white">Nuestros Productos</h1>
+                    <p class="text-lightcoffee-light mt-2 max-w-xl mx-auto text-sm">Explora nuestra selección de bebidas frías y calientes, bocadillos y repostería artesanal.</p>
+                </div>
+            </section>
+
+            <section class="py-12 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <!-- Filtros por Categoría y Buscador -->
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-10 pb-6 border-b border-gray-200">
+                        <!-- Categorías -->
+                        <div class="flex flex-wrap justify-center gap-2" id="category-filters">
+                            <button onclick="filterCategory('todos')" class="category-btn active px-5 py-2.5 rounded-full text-sm font-bold transition bg-darkcoffee text-white shadow-md">Todos</button>
+                            <button onclick="filterCategory('cafe')" class="category-btn px-5 py-2.5 rounded-full text-sm font-semibold transition bg-lightcoffee-bg text-darkcoffee hover:bg-lightcoffee-light border border-lightcoffee-border/30">Cafés Calientes</button>
+                            <button onclick="filterCategory('frios')" class="category-btn px-5 py-2.5 rounded-full text-sm font-semibold transition bg-lightcoffee-bg text-darkcoffee hover:bg-lightcoffee-light border border-lightcoffee-border/30">Bebidas Frías</button>
+                            <button onclick="filterCategory('postres')" class="category-btn px-5 py-2.5 rounded-full text-sm font-semibold transition bg-lightcoffee-bg text-darkcoffee hover:bg-lightcoffee-light border border-lightcoffee-border/30">Repostería</button>
+                            <button onclick="filterCategory('desayunos')" class="category-btn px-5 py-2.5 rounded-full text-sm font-semibold transition bg-lightcoffee-bg text-darkcoffee hover:bg-lightcoffee-light border border-lightcoffee-border/30">Desayunos</button>
+                        </div>
+
+                        <!-- Buscador -->
+                        <div class="relative w-full md:w-72">
+                            <input type="text" id="search-input" oninput="filterSearch()" placeholder="Buscar producto..." class="w-full pl-10 pr-4 py-2.5 rounded-full border border-lightcoffee-border focus:outline-none focus:ring-2 focus:ring-darkcoffee bg-white text-sm text-darkcoffee">
+                            <i data-lucide="search" class="w-4 h-4 text-darkcoffee/50 absolute left-3.5 top-3.5"></i>
+                        </div>
+                    </div>
+
+                    <!-- Grid de Productos -->
+                    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <!-- Se renderiza dinámicamente -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ==================== PÁGINA 3: CONTACTAR ==================== -->
+        <div id="page-contacto" class="page-content hidden">
+            <section class="py-12 bg-darkcoffee text-white text-center">
+                <div class="max-w-7xl mx-auto px-4">
+                    <span class="text-lightcoffee font-semibold text-xs uppercase tracking-widest block mb-2">Estamos para atenderte</span>
+                    <h1 class="text-4xl font-serif font-bold text-white">Contacta con Nosotros</h1>
+                    <p class="text-lightcoffee-light mt-2 max-w-xl mx-auto text-sm">Visítanos, envíanos un mensaje o realiza una consulta directamente.</p>
+                </div>
+            </section>
+
+            <section class="py-16 bg-lightcoffee-bg">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                        
+                        <!-- Tarjeta de Información de Contacto -->
+                        <div class="bg-white p-8 rounded-2xl shadow-md border border-lightcoffee-border/40 space-y-8 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-2xl font-serif font-bold text-darkcoffee mb-6">Información</h3>
+                                <div class="space-y-6">
+                                    <div class="flex items-start space-x-4">
+                                        <div class="p-3 bg-darkcoffee text-lightcoffee rounded-xl">
+                                            <i data-lucide="map-pin" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-darkcoffee">Dirección</h4>
+                                            <p class="text-sm text-gray-600 mt-0.5">Av. Principal de los Cafetales 456, Centro Histórico</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start space-x-4">
+                                        <div class="p-3 bg-darkcoffee text-lightcoffee rounded-xl">
+                                            <i data-lucide="phone" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-darkcoffee">Teléfono / WhatsApp</h4>
+                                            <p class="text-sm text-gray-600 mt-0.5">+1 (234) 567-890</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start space-x-4">
+                                        <div class="p-3 bg-darkcoffee text-lightcoffee rounded-xl">
+                                            <i data-lucide="mail" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-darkcoffee">Correo Electrónico</h4>
+                                            <p class="text-sm text-gray-600 mt-0.5">contacto@aromacafe.com</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-start space-x-4">
+                                        <div class="p-3 bg-darkcoffee text-lightcoffee rounded-xl">
+                                            <i data-lucide="clock" class="w-6 h-6"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-darkcoffee">Horarios de Atención</h4>
+                                            <p class="text-sm text-gray-600 mt-0.5">Lun - Vie: 7:00 AM - 9:00 PM</p>
+                                            <p class="text-sm text-gray-600">Sáb - Dom: 8:00 AM - 10:00 PM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-6 border-t border-gray-200">
+                                <h4 class="font-bold text-darkcoffee text-sm mb-3">Síguenos</h4>
+                                <div class="flex space-x-3">
+                                    <a href="#" class="p-2.5 bg-darkcoffee text-white hover:bg-lightcoffee hover:text-darkcoffee rounded-lg transition"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                                    <a href="#" class="p-2.5 bg-darkcoffee text-white hover:bg-lightcoffee hover:text-darkcoffee rounded-lg transition"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                                    <a href="#" class="p-2.5 bg-darkcoffee text-white hover:bg-lightcoffee hover:text-darkcoffee rounded-lg transition"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Formulario de Contacto -->
+                        <div class="lg:col-span-2 bg-white p-8 sm:p-10 rounded-2xl shadow-md border border-lightcoffee-border/40">
+                            <h3 class="text-2xl font-serif font-bold text-darkcoffee mb-2">Envíanos un Mensaje</h3>
+                            <p class="text-sm text-gray-600 mb-6">Completa el formulario y te responderemos a la brevedad posible.</p>
+
+                            <form onsubmit="handleContactForm(event)" class="space-y-5">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-darkcoffee mb-1.5">Nombre Completo</label>
+                                        <input type="text" required placeholder="Ej. Juan Pérez" class="w-full px-4 py-3 rounded-xl border border-lightcoffee-border focus:ring-2 focus:ring-darkcoffee focus:outline-none text-sm bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-darkcoffee mb-1.5">Correo Electrónico</label>
+                                        <input type="email" required placeholder="juan@ejemplo.com" class="w-full px-4 py-3 rounded-xl border border-lightcoffee-border focus:ring-2 focus:ring-darkcoffee focus:outline-none text-sm bg-white">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-darkcoffee mb-1.5">Teléfono</label>
+                                        <input type="tel" placeholder="+1 234 567..." class="w-full px-4 py-3 rounded-xl border border-lightcoffee-border focus:ring-2 focus:ring-darkcoffee focus:outline-none text-sm bg-white">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-darkcoffee mb-1.5">Asunto</label>
+                                        <select class="w-full px-4 py-3 rounded-xl border border-lightcoffee-border focus:ring-2 focus:ring-darkcoffee focus:outline-none text-sm bg-white">
+                                            <option value="consulta">Consulta General</option>
+                                            <option value="reserva">Reserva de Eventos</option>
+                                            <option value="sugerencia">Sugerencias</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-darkcoffee mb-1.5">Mensaje</label>
+                                    <textarea rows="4" required placeholder="Escribe tu mensaje aquí..." class="w-full px-4 py-3 rounded-xl border border-lightcoffee-border focus:ring-2 focus:ring-darkcoffee focus:outline-none text-sm bg-white"></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full sm:w-auto px-8 py-3.5 bg-darkcoffee hover:bg-darkcoffee-hover text-white font-bold rounded-xl shadow-md transition duration-200 flex items-center justify-center gap-2">
+                                    <i data-lucide="send" class="w-4 h-4"></i> Enviar Mensaje
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-darkcoffee text-white py-12 border-t border-lightcoffee/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="coffee" class="w-6 h-6 text-lightcoffee"></i>
+                        <span class="text-xl font-bold font-serif text-white">Aroma & Café</span>
+                    </div>
+                    <p class="text-sm text-lightcoffee-light leading-relaxed">El sabor auténtico del café artesanal en un ambiente cálido y acogedor.</p>
+                </div>
+
+                <div>
+                    <h4 class="text-lightcoffee font-semibold mb-4 font-serif">Páginas</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><button onclick="showPage('inicio')" class="hover:text-lightcoffee transition">Inicio</button></li>
+                        <li><button onclick="showPage('productos')" class="hover:text-lightcoffee transition">Productos</button></li>
+                        <li><button onclick="showPage('contacto')" class="hover:text-lightcoffee transition">Contactar</button></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lightcoffee font-semibold mb-4 font-serif">Horario</h4>
+                    <ul class="space-y-2 text-sm text-lightcoffee-light">
+                        <li>Lunes - Viernes: 7:00 am - 9:00 pm</li>
+                        <li>Sábados - Domingos: 8:00 am - 10:00 pm</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-lightcoffee font-semibold mb-4 font-serif">Contacto Rápido</h4>
+                    <p class="text-sm text-lightcoffee-light mb-2">Av. Principal de los Cafetales 456</p>
+                    <p class="text-sm text-lightcoffee-light mb-2">contacto@aromacafe.com</p>
+                    <p class="text-sm text-lightcoffee font-bold">+1 (234) 567-890</p>
+                </div>
+            </div>
+
+            <div class="border-t border-lightcoffee/20 pt-8 text-center text-xs text-lightcoffee-light">
+                <p>&copy; 2026 Aroma & Café. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CARRITO MODAL / DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity" onclick="toggleCart()"></div>
+
+        <div class="fixed inset-y-0 right-0 pl-10 max-w-full flex">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                <!-- Header Carrito -->
+                <div class="p-6 bg-darkcoffee text-white flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-lightcoffee"></i>
+                        <h2 class="text-lg font-bold font-serif text-white">Tu Pedido</h2>
+                    </div>
+                    <button onclick="toggleCart()" class="text-lightcoffee hover:text-white p-1">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                </div>
+
+                <!-- Lista de Productos -->
+                <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <!-- Productos agregados se renderizan aquí -->
+                </div>
+
+                <!-- Footer Carrito -->
+                <div class="p-6 border-t border-gray-200 bg-lightcoffee-bg">
+                    <div class="flex justify-between text-lg font-bold text-darkcoffee mb-4">
+                        <span>Total:</span>
+                        <span id="cart-total">$0.00</span>
+                    </div>
+                    <button onclick="checkoutCart()" class="w-full py-3.5 bg-darkcoffee hover:bg-darkcoffee-hover text-white font-bold rounded-xl shadow-md transition flex items-center justify-center gap-2">
+                        <i data-lucide="check-circle" class="w-5 h-5"></i> Confirmar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIFICACIÓN TOAST -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-darkcoffee text-white px-5 py-3.5 rounded-xl shadow-2xl z-50 flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 border border-lightcoffee/30">
+        <i data-lucide="check-circle" class="w-5 h-5 text-lightcoffee" id="toast-icon"></i>
+        <span id="toast-message" class="text-sm font-medium">Mensaje de notificación</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // DATOS DE LOS PRODUCTOS
+        const products = [
+            {
+                id: 1,
+                name: "Espresso Italiano",
+                category: "cafe",
+                price: 2.50,
+                description: "Extracción pura de granos seleccionados con cuerpo denso y crema dorada.",
+                image: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                id: 2,
+                name: "Cappuccino Tradicional",
+                category: "cafe",
+                price: 3.80,
+                description: "Espresso perfecto, leche vaporizada y una capa cremosa de espuma de leche.",
+                image: "https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                id: 3,
+                name: "Iced Caramel Latte",
+                category: "frios",
+                price: 4.50,
+                description: "Café espresso helado, leche fresca, cubos de hielo y jarabe de caramelo artesanal.",
+                image: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                id: 4,
+                name: "Croissant de Almendras",
+                category: "postres",
+                price: 3.20,
+                description: "Hojaldre de mantequilla horneado diariamente, relleno de crema de almendras.",
+                image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                id: 5,
+                name: "Tarta de Queso con Frutos Rojos",
+                category: "postres",
+                price: 4.80,
+                description: "Cremosa tarta estilo New York servida con coulis casero de frutos del bosque.",
+                image: "https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                id: 6,
+                name: "Tostada de Aguacate & Huevo",
+                category: "desayunos",
+                price: 6.50,
+                description: "Pan de masa madre tostado con aguacate machacado, huevo escalfado y especias.",
+                image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                id: 7,
+                name: "Cold Brew de la Casa",
+                category: "frios",
+                price: 4.20,
+                description: "Infusión de café extraída en frío durante 18 horas, suave y altamente refrescante.",
+                image: "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&q=80&w=400"
+            },
+            {
+                id: 8,
+                name: "Mocha de Chocolate Oscuro",
+                category: "cafe",
+                price: 4.10,
+                description: "Espresso combinado con cacao puro, leche cremada y un toque de canela.",
+                image: "https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&q=80&w=400"
+            }
+        ];
+
+        let cart = [];
+        let currentCategory = 'todos';
+
+        // INICIALIZACIÓN
+        document.addEventListener("DOMContentLoaded", () => {
+            lucide.createIcons();
+            renderProducts(products);
+        });
+
+        // NAVEGACIÓN ENTRE PÁGINAS (Inicio, Productos, Contactar)
+        function showPage(pageId) {
+            // Ocultar todas las páginas
+            document.querySelectorAll('.page-content').forEach(p => p.classList.add('hidden'));
+            
+            // Mostrar la página solicitada
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if(targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            // Actualizar estilo del menú
+            document.querySelectorAll('.nav-link').forEach(btn => {
+                btn.classList.remove('text-lightcoffee', 'border-b-2', 'border-lightcoffee');
+                btn.classList.add('text-white');
+            });
+
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('text-lightcoffee', 'border-b-2', 'border-lightcoffee');
+                activeBtn.classList.remove('text-white');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // RENDERIZAR PRODUCTOS
+        function renderProducts(items) {
+            const grid = document.getElementById("products-grid");
+            if (!grid) return;
+            grid.innerHTML = "";
+
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-gray-500">
+                        <i data-lucide="search-x" class="w-12 h-12 mx-auto text-lightcoffee mb-3"></i>
+                        <p class="text-base font-semibold">No se encontraron productos en esta búsqueda.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            items.forEach(product => {
+                const card = document.createElement("div");
+                card.className = "bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-lightcoffee-border/30 flex flex-col justify-between group";
+                card.innerHTML = `
+                    <div>
+                        <div class="relative overflow-hidden h-48">
+                            <img src="${product.image}" alt="${product.name}" 
+                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                                 onerror="this.src='https://placehold.co/400x300/2B1704/ffffff?text=${encodeURIComponent(product.name)}'">
+                            <span class="absolute top-3 right-3 bg-darkcoffee text-white text-xs px-3 py-1 rounded-full font-bold shadow">
+                                $${product.price.toFixed(2)}
+                            </span>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="text-lg font-bold font-serif text-darkcoffee">${product.name}</h3>
+                            <p class="text-gray-600 text-xs mt-2 line-clamp-2 leading-relaxed">${product.description}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 pt-0">
+                        <button onclick="addToCart(${product.id})" class="w-full py-2.5 bg-lightcoffee-bg hover:bg-darkcoffee text-darkcoffee hover:text-white border border-lightcoffee-border font-semibold rounded-xl transition duration-200 flex items-center justify-center gap-2 text-sm">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Agregar al Pedido
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // FILTROS Y BÚSQUEDA
+        function filterCategory(category) {
+            currentCategory = category;
+            
+            const buttons = document.querySelectorAll('.category-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-darkcoffee', 'text-white', 'shadow-md');
+                btn.classList.add('bg-lightcoffee-bg', 'text-darkcoffee');
+            });
+            event.currentTarget.classList.remove('bg-lightcoffee-bg', 'text-darkcoffee');
+            event.currentTarget.classList.add('bg-darkcoffee', 'text-white', 'shadow-md');
+
+            applyFilters();
+        }
+
+        function filterSearch() {
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const filtered = products.filter(p => {
+                const matchesCategory = (currentCategory === 'todos' || p.category === currentCategory);
+                const matchesQuery = p.name.toLowerCase().includes(query) || p.description.toLowerCase().includes(query);
+                return matchesCategory && matchesQuery;
+            });
+            renderProducts(filtered);
+        }
+
+        // CARRITO DE COMPRAS
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`Agregado: ${product.name}`);
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById("cart-badge");
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            if (totalCount > 0) {
+                badge.innerText = totalCount;
+                badge.classList.remove("hidden");
+            } else {
+                badge.classList.add("hidden");
+            }
+
+            const cartContainer = document.getElementById("cart-items");
+            cartContainer.innerHTML = "";
+
+            if (cart.length === 0) {
+                cartContainer.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-2 opacity-40"></i>
+                        <p class="text-sm">Tu carrito está vacío.</p>
+                    </div>
+                `;
+                document.getElementById("cart-total").innerText = "$0.00";
+                lucide.createIcons();
+                return;
+            }
+
+            let total = 0;
+
+            cart.forEach(item => {
+                total += item.price * item.quantity;
+                const itemEl = document.createElement("div");
+                itemEl.className = "flex items-center justify-between p-3 bg-lightcoffee-bg rounded-xl border border-lightcoffee-border/40";
+                itemEl.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <img src="${item.image}" alt="${item.name}" class="w-12 h-12 object-cover rounded-lg" onerror="this.src='https://placehold.co/100x100/2B1704/ffffff?text=Café'">
+                        <div>
+                            <h4 class="font-bold text-xs text-darkcoffee">${item.name}</h4>
+                            <span class="text-xs text-darkcoffee font-semibold">$${(item.price * item.quantity).toFixed(2)}</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="changeQuantity(${item.id}, -1)" class="w-7 h-7 bg-white rounded-md flex items-center justify-center border border-gray-300 text-sm hover:bg-gray-100">-</button>
+                        <span class="text-xs font-bold w-4 text-center">${item.quantity}</span>
+                        <button onclick="changeQuantity(${item.id}, 1)" class="w-7 h-7 bg-white rounded-md flex items-center justify-center border border-gray-300 text-sm hover:bg-gray-100">+</button>
+                    </div>
+                `;
+                cartContainer.appendChild(itemEl);
+            });
+
+            document.getElementById("cart-total").innerText = `$${total.toFixed(2)}`;
+            lucide.createIcons();
+        }
+
+        function changeQuantity(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+            }
+            updateCartUI();
+        }
+
+        function toggleCart() {
+            const drawer = document.getElementById("cart-drawer");
+            drawer.classList.toggle("hidden");
+        }
+
+        function checkoutCart() {
+            if (cart.length === 0) {
+                showToast("Agrega productos antes de realizar el pedido", "error");
+                return;
+            }
+            cart = [];
+            updateCartUI();
+            toggleCart();
+            showToast("¡Pedido confirmado con éxito! Gracias por tu compra.");
+        }
+
+        // MANEJO FORMULARIO CONTACTO
+        function handleContactForm(e) {
+            e.preventDefault();
+            showToast("¡Mensaje enviado con éxito! Te responderemos pronto.");
+            e.target.reset();
+        }
+
+        // MENÚ MÓVIL
+        function toggleMobileMenu() {
+            const menu = document.getElementById("mobile-menu");
+            const openIcon = document.getElementById("menu-icon-open");
+            const closeIcon = document.getElementById("menu-icon-close");
+
+            menu.classList.toggle("hidden");
+            openIcon.classList.toggle("hidden");
+            closeIcon.classList.toggle("hidden");
+        }
+
+        // TOAST
+        function showToast(message, type = "success") {
+            const toast = document.getElementById("toast");
+            const toastMsg = document.getElementById("toast-message");
+
+            toastMsg.innerText = message;
+            
+            toast.classList.remove("translate-y-20", "opacity-0");
+            toast.classList.add("translate-y-0", "opacity-100");
+
+            setTimeout(() => {
+                toast.classList.remove("translate-y-0", "opacity-100");
+                toast.classList.add("translate-y-20", "opacity-0");
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
